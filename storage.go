@@ -11,7 +11,7 @@ import (
 )
 
 type Storage interface {
-    CreateUserToDb(*User) error
+    CreateUserToDb(*database.User) (*database.User, error)
 }
 
 type PostgresStore struct {
@@ -38,7 +38,7 @@ func NewPostgresStore() (*PostgresStore, error) {
     }, nil
 }
 
-func (s *PostgresStore) CreateUserToDb(user *User) error {
+func (s *PostgresStore) CreateUserToDb(user *database.User) (*database.User, error){
     userToDb := database.CreateUserParams{
         ID: user.ID,
         CreatedAt: user.CreatedAt,
@@ -46,10 +46,10 @@ func (s *PostgresStore) CreateUserToDb(user *User) error {
         Name: user.Name,
     }
 
-    _, err := s.DB.CreateUser(context.Background(), userToDb) 
+    createdUser, err := s.DB.CreateUser(context.Background(), userToDb) 
     if err != nil {
-        return err
+        return &createdUser, err
     }
 
-    return nil
+    return &createdUser, nil
 }
