@@ -1,0 +1,18 @@
+services:
+  db:
+    image: postgres:16.3-alpine3.20
+    container_name: rss-feed
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=rss-feed
+      - POSTGRES_DB=blogator
+    ports:
+      - '5432:5432'
+    volumes: 
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
+    driver: local
+
