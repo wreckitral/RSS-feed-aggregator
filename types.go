@@ -4,9 +4,10 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/wreckitral/RSS-feed-aggregator/internal/database"
 )
 
-type User struct {
+type CreateUserResponse struct {
     ID uuid.UUID `json:"id"`
     CreatedAt time.Time `json:"createdAt"`
     UpdatedAt time.Time `json:"updatedAt"`
@@ -17,13 +18,13 @@ type CreateUserRequest struct {
     Name string `json:"name"`
 }
 
-func NewUser(name string) (*User, error) {
+func NewUser(name string) (*database.User, error) {
     id := uuid.New()
     
-    return &User{
+    return &database.User{
         ID: id,
-        CreatedAt: time.Now().UTC(),
-        UpdatedAt: time.Now().UTC(),
+        CreatedAt: time.Now(),
+        UpdatedAt: time.Now(),
         Name: name,
     }, nil
 }
