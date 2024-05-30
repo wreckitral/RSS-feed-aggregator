@@ -55,11 +55,19 @@ func(s *APIServer) HandleCreateUser(res http.ResponseWriter, req *http.Request) 
         return err
     }
 
-    if err := s.Store.CreateUserToDb(user); err != nil {
+    createdUser, err := s.Store.CreateUserToDb(user)
+    if err != nil {
         return err
     }
 
-    return writeJSON(res, http.StatusOK, map[string]string{"msg":reqBody.Name + "successfully created"}) 
+    resBody := CreateUserResponse{
+        ID: createdUser.ID,
+        CreatedAt: createdUser.CreatedAt,
+        UpdatedAt: createdUser.UpdatedAt,
+        Name: createdUser.Name,
+    }
+
+    return writeJSON(res, http.StatusOK, resBody)
 }
 
 func(s *APIServer) Readiness(res http.ResponseWriter, req *http.Request) error {
