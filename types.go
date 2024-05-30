@@ -13,6 +13,10 @@ type User struct {
     Name string `json:"name"`
 }
 
+type CreateUserRequest struct {
+    Name string `json:"name"`
+}
+
 func NewUser(name string) (*User, error) {
     id := uuid.New()
     
