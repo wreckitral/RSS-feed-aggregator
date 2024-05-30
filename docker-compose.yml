@@ -3,8 +3,8 @@ services:
     image: postgres:16.3-alpine3.20
     container_name: rss-feed
     restart: always
+    user: postgres
     environment:
-      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=rss-feed
       - POSTGRES_DB=blogator
     ports:
