@@ -23,11 +23,8 @@ func NewAPIError(statusCode int, err error) APIError {
     }
 }
 
-func InvalidRequestData(errors map[string]string) APIError {
-    return APIError {
-        StatusCode: http.StatusUnprocessableEntity,
-        Msg: errors,
-    }
+func UnauthorizedError(err error) APIError {
+    return NewAPIError(http.StatusForbidden, fmt.Errorf("%s", err))
 }
 
 func InvalidJSON() APIError {
