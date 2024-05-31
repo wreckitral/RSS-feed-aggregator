@@ -7,11 +7,12 @@ import (
 	"github.com/wreckitral/RSS-feed-aggregator/internal/database"
 )
 
-type CreateUserResponse struct {
+type UserResponse struct {
     ID uuid.UUID `json:"id"`
     CreatedAt time.Time `json:"createdAt"`
     UpdatedAt time.Time `json:"updatedAt"`
     Name string `json:"name"`
+    APIKey string `json:"apiKey"`
 }
 
 type CreateUserRequest struct {
