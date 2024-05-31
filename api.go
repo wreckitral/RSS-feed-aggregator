@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/wreckitral/RSS-feed-aggregator/internal/auth"
+	"github.com/wreckitral/RSS-feed-aggregator/internal/database"
 )
 
 type APIServer struct {
@@ -43,7 +44,8 @@ func (s *APIServer) handleUser(res http.ResponseWriter, req *http.Request) error
 	}
 
     if req.Method == "GET" {
-        return s.HandleGetUser(res, req)
+        s.middlewareAuth(s.HandleGetUser).ServeHTTP(res, req)
+        return nil
     }
 
     return writeJSON(res, http.StatusBadRequest, map[string]string{"msg":req.Method + " is not allowed"})
@@ -77,17 +79,7 @@ func(s *APIServer) HandleCreateUser(res http.ResponseWriter, req *http.Request) 
     return writeJSON(res, http.StatusCreated, resBody)
 }
 
-func(s *APIServer) HandleGetUser(res http.ResponseWriter, req *http.Request) error {
-    apiKey, err := auth.GetAPIKey(req.Header)   
-    if err != nil {
-        return UnauthorizedError(err)
-    }
-
-    user, err := s.Store.GetUserByAPIKey(apiKey)
-    if err != nil {
-        return err
-    }
-
+func(s *APIServer) HandleGetUser(res http.ResponseWriter, req *http.Request, user *database.User) error {
     resBody := UserResponse{
         ID: user.ID,
         CreatedAt: user.CreatedAt,
@@ -97,6 +89,26 @@ func(s *APIServer) HandleGetUser(res http.ResponseWriter, req *http.Request) err
     }
 
     return writeJSON(res, http.StatusAccepted, resBody)
+}
+
+func (s *APIServer) middlewareAuth(handler authedHandler) http.HandlerFunc {
+    return func(res http.ResponseWriter, req *http.Request) {
+        apiKey, err := auth.GetAPIKey(req.Header)
+        if err != nil {
+            writeJSON(res, http.StatusForbidden, UnauthorizedError(err.Error()))
+            return
+        }
+
+        user, err := s.Store.GetUserByAPIKey(apiKey)
+        if err != nil {
+            writeJSON(res, http.StatusForbidden, UnauthorizedError("api key is not recognized"))
+            return
+        }
+
+        if err := handler(res, req, user); err != nil {
+            writeJSON(res, http.StatusInternalServerError, err)
+        }
+    }
 }
 
 func(s *APIServer) Readiness(res http.ResponseWriter, req *http.Request) error {
