@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+
+	"github.com/wreckitral/RSS-feed-aggregator/internal/auth"
 )
 
 type APIServer struct {
@@ -40,6 +42,10 @@ func (s *APIServer) handleUser(res http.ResponseWriter, req *http.Request) error
 		return s.HandleCreateUser(res, req)
 	}
 
+    if req.Method == "GET" {
+        return s.HandleGetUser(res, req)
+    }
+
     return writeJSON(res, http.StatusBadRequest, map[string]string{"msg":req.Method + " is not allowed"})
 }
 
@@ -60,14 +66,37 @@ func(s *APIServer) HandleCreateUser(res http.ResponseWriter, req *http.Request) 
         return err
     }
 
-    resBody := CreateUserResponse{
+    resBody := UserResponse{
         ID: createdUser.ID,
         CreatedAt: createdUser.CreatedAt,
         UpdatedAt: createdUser.UpdatedAt,
         Name: createdUser.Name,
+        APIKey: createdUser.ApiKey,
     }
 
-    return writeJSON(res, http.StatusOK, resBody)
+    return writeJSON(res, http.StatusCreated, resBody)
+}
+
+func(s *APIServer) HandleGetUser(res http.ResponseWriter, req *http.Request) error {
+    apiKey, err := auth.GetAPIKey(req.Header)   
+    if err != nil {
+        return UnauthorizedError(err)
+    }
+
+    user, err := s.Store.GetUserByAPIKey(apiKey)
+    if err != nil {
+        return err
+    }
+
+    resBody := UserResponse{
+        ID: user.ID,
+        CreatedAt: user.CreatedAt,
+        UpdatedAt: user.UpdatedAt,
+        Name: user.Name,
+        APIKey: user.ApiKey,
+    }
+
+    return writeJSON(res, http.StatusAccepted, resBody)
 }
 
 func(s *APIServer) Readiness(res http.ResponseWriter, req *http.Request) error {
