@@ -12,6 +12,7 @@ import (
 
 type Storage interface {
     CreateUserToDb(*database.User) (*database.User, error)
+    GetUserByAPIKey(apiKey string) (*database.User, error)
 }
 
 type PostgresStore struct {
@@ -48,8 +49,17 @@ func (s *PostgresStore) CreateUserToDb(user *database.User) (*database.User, err
 
     createdUser, err := s.DB.CreateUser(context.Background(), userToDb) 
     if err != nil {
-        return &createdUser, err
+        return nil, err
     }
 
     return &createdUser, nil
+}
+
+func (s *PostgresStore) GetUserByAPIKey(apiKey string) (*database.User, error) {
+    user, err := s.DB.GetUserByAPIKey(context.Background(), apiKey)
+    if err != nil {
+        return nil, err
+    }
+    
+    return &user, nil
 }
