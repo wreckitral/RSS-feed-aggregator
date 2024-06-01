@@ -13,6 +13,7 @@ import (
 type Storage interface {
     CreateUserToDb(*database.User) (*database.User, error)
     GetUserByAPIKey(apiKey string) (*database.User, error)
+    CreateFeedToDb(*database.Feed) (*database.Feed, error)
 }
 
 type PostgresStore struct {
@@ -63,3 +64,24 @@ func (s *PostgresStore) GetUserByAPIKey(apiKey string) (*database.User, error) {
     
     return &user, nil
 }
+
+
+func (s *PostgresStore) CreateFeedToDb(feed *database.Feed) (*database.Feed, error) {
+    feedToDb := database.CreateFeedParams{
+        ID: feed.ID,
+        CreatedAt: feed.CreatedAt,
+        UpdatedAt: feed.UpdatedAt,
+        Name: feed.Name,
+        Url: feed.Url,
+        UserID: feed.UserID,
+    }
+
+    createdFeed, err := s.DB.CreateFeed(context.Background(), feedToDb)
+    if err != nil {
+        return nil, err
+    }
+
+    return &createdFeed, nil
+}
+
+
