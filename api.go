@@ -88,7 +88,7 @@ func(s *APIServer) HandleGetUser(res http.ResponseWriter, req *http.Request, use
         APIKey: user.ApiKey,
     }
 
-    return writeJSON(res, http.StatusAccepted, resBody)
+    return writeJSON(res, http.StatusOK, resBody)
 }
 
 func (s *APIServer) middlewareAuth(handler authedHandler) http.HandlerFunc {
