@@ -11,9 +11,10 @@ import (
 )
 
 type Storage interface {
-    CreateUserToDb(*database.User) (*database.User, error)
-    GetUserByAPIKey(apiKey string) (*database.User, error)
-    CreateFeedToDb(*database.Feed) (*database.Feed, error)
+    CreateUserToDb(*database.User)  (*database.User, error)
+    GetUserByAPIKey(apiKey string)  (*database.User, error)
+    CreateFeedToDb(*database.Feed)  (*Feed, error)
+    GetFeeds()                      ([]*Feed, error)  
 }
 
 type PostgresStore struct {
@@ -66,7 +67,7 @@ func (s *PostgresStore) GetUserByAPIKey(apiKey string) (*database.User, error) {
 }
 
 
-func (s *PostgresStore) CreateFeedToDb(feed *database.Feed) (*database.Feed, error) {
+func (s *PostgresStore) CreateFeedToDb(feed *database.Feed) (*Feed, error) {
     feedToDb := database.CreateFeedParams{
         ID: feed.ID,
         CreatedAt: feed.CreatedAt,
@@ -81,7 +82,37 @@ func (s *PostgresStore) CreateFeedToDb(feed *database.Feed) (*database.Feed, err
         return nil, err
     }
 
-    return &createdFeed, nil
+    feedToAPI := Feed{
+        ID: createdFeed.ID,
+        CreatedAt: createdFeed.CreatedAt,
+        UpdatedAt: createdFeed.UpdatedAt,
+        Name: createdFeed.Name,
+        Url: createdFeed.Url,
+        UserID: createdFeed.UserID,
+    }
+
+    return &feedToAPI, nil
 }
 
+func (s *PostgresStore) GetFeeds() ([]*Feed, error) {
+    feedsFromDb, err := s.DB.GetAllFeeds(context.Background())
+    if err != nil {
+        return nil, err
+    }
 
+    feeds := []*Feed{}
+
+    for _, feed := range feedsFromDb {
+        f := &Feed {
+            ID: feed.ID,
+            CreatedAt: feed.CreatedAt,
+            UpdatedAt: feed.UpdatedAt,
+            Name: feed.Name,
+            Url: feed.Url,
+            UserID: feed.UserID,
+        }
+        feeds = append(feeds, f)
+    }
+
+    return feeds, nil
+}
