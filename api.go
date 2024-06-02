@@ -64,7 +64,7 @@ func(s *APIServer) HandleCreateFeed(res http.ResponseWriter, req *http.Request, 
     var reqBody CreateFeedRequest
 
     if err := json.NewDecoder(req.Body).Decode(&reqBody); err != nil {
-        return err
+        return InvalidJSON()
     }
 
     feed, err := NewFeed(reqBody.Name, reqBody.Url, user.ID)
