@@ -84,19 +84,11 @@ func(s *APIServer) HandleCreateUser(res http.ResponseWriter, req *http.Request) 
         return err
     }
 
-    resBody := UserResponse{
-        ID: createdUser.ID,
-        CreatedAt: createdUser.CreatedAt,
-        UpdatedAt: createdUser.UpdatedAt,
-        Name: createdUser.Name,
-        APIKey: createdUser.ApiKey,
-    }
-
-    return writeJSON(res, http.StatusCreated, resBody)
+    return writeJSON(res, http.StatusCreated, createdUser)
 }
 
 func(s *APIServer) HandleGetUser(res http.ResponseWriter, req *http.Request, user *database.User) error {
-    resBody := UserResponse{
+    resBody := User{
         ID: user.ID,
         CreatedAt: user.CreatedAt,
         UpdatedAt: user.UpdatedAt,
