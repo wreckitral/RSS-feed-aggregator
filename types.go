@@ -19,7 +19,7 @@ type CreateUserRequest struct {
     Name string `json:"name"`
 }
 
-type FeedResponse struct {
+type Feed struct {
     ID uuid.UUID `json:"id"`
     CreatedAt time.Time `json:"createdAt"`
     UpdatedAt time.Time `json:"updatedAt"`
