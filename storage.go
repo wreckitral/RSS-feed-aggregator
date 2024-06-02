@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/google/uuid"
 	_ "github.com/lib/pq"
 	"github.com/wreckitral/RSS-feed-aggregator/internal/database"
 )
@@ -16,6 +17,7 @@ type Storage interface {
     CreateFeedToDb(*database.Feed)  (*Feed, error)
     GetFeeds()                      ([]*Feed, error)  
     CreateFeedFollows(*database.FeedFollow) (*FeedFollow, error)
+    DeleteFeedFollows(id, user_id uuid.UUID) error
 }
 
 type PostgresStore struct {
@@ -155,4 +157,18 @@ func (s *PostgresStore) CreateFeedFollows(ff *database.FeedFollow) (*FeedFollow,
         UserID: feedToAPI.UserID,
         FeedID: feedToAPI.FeedID,
     }, nil
+}
+
+
+func (s *PostgresStore) DeleteFeedFollows(id, userId uuid.UUID) error {
+    feedFollowsToDelete := database.DeleteFeedFollowsParams{
+        ID: id,
+        UserID: userId,
+    }
+
+    if err := s.DB.DeleteFeedFollows(context.Background(), feedFollowsToDelete); err != nil {
+        return err
+    }
+
+    return nil
 }
