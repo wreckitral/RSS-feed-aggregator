@@ -17,6 +17,7 @@ type Storage interface {
     CreateFeedToDb(*database.Feed)  (*Feed, error)
     GetFeeds()                      ([]*Feed, error)  
     CreateFeedFollows(*database.FeedFollow) (*FeedFollow, error)
+    GetFeedFollows(uuid.UUID) ([]*FeedFollow, error)
     DeleteFeedFollows(id, user_id uuid.UUID) error
 }
 
@@ -159,7 +160,6 @@ func (s *PostgresStore) CreateFeedFollows(ff *database.FeedFollow) (*FeedFollow,
     }, nil
 }
 
-
 func (s *PostgresStore) DeleteFeedFollows(id, userId uuid.UUID) error {
     feedFollowsToDelete := database.DeleteFeedFollowsParams{
         ID: id,
@@ -171,4 +171,26 @@ func (s *PostgresStore) DeleteFeedFollows(id, userId uuid.UUID) error {
     }
 
     return nil
+}
+
+func (s *PostgresStore) GetFeedFollows(userId uuid.UUID) ([]*FeedFollow, error) {
+    getFeedFollows, err := s.DB.GetAllFeedFollows(context.Background(), userId)
+    if err != nil {
+        return nil, err
+    }
+
+    feedFollows := []*FeedFollow{}
+
+    for _, feed := range getFeedFollows {
+        f := &FeedFollow {
+            ID: feed.ID,
+            FeedID: feed.FeedID,
+            UserID: feed.UserID,
+            CreatedAt: feed.CreatedAt,
+            UpdatedAt: feed.UpdatedAt,
+        }
+        feedFollows = append(feedFollows, f)
+    }
+
+    return feedFollows, nil
 }
