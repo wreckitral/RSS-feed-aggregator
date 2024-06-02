@@ -26,8 +26,6 @@ func (s *APIServer) Run() error {
 
     router.HandleFunc("/v1/users", MakeHandler(s.handleUser))
     router.HandleFunc("/v1/feeds", MakeHandler(s.handleFeed))
-    router.HandleFunc("/readiness", MakeHandler(s.Readiness))
-    router.HandleFunc("/err", MakeHandler(s.Err))
     
     server := http.Server{
         Addr: s.listenAddr,
@@ -38,34 +36,6 @@ func (s *APIServer) Run() error {
 
     return server.ListenAndServe()
 }
-
-
-func (s *APIServer) handleUser(res http.ResponseWriter, req *http.Request) error {
-    if req.Method == "POST" {
-        return s.HandleCreateUser(res, req)
-    }
-
-    if req.Method == "GET" {
-        s.middlewareAuth(s.HandleGetUser).ServeHTTP(res, req)
-        return nil
-    }
-
-    return writeJSON(res, http.StatusBadRequest, map[string]string{"msg":req.Method + " is not allowed"})
-}
-
-func (s *APIServer) handleFeed(res http.ResponseWriter, req *http.Request) error {
-    if req.Method == "GET" {
-        return s.HandleGetFeeds(res, req)
-    }
-
-    if req.Method == "POST" {
-        s.middlewareAuth(s.HandleCreateFeed).ServeHTTP(res, req)
-        return nil
-    }
-
-    return writeJSON(res, http.StatusBadRequest, map[string]string{"msg":req.Method + " is not allowed"})
-}
-
 
 func(s *APIServer) HandleCreateUser(res http.ResponseWriter, req *http.Request) error {
     var reqBody CreateUserRequest
@@ -116,16 +86,7 @@ func(s *APIServer) HandleCreateFeed(res http.ResponseWriter, req *http.Request, 
         return err
     }
 
-    resBody := Feed{
-        ID: createdFeed.ID, 
-        CreatedAt: createdFeed.CreatedAt,
-        UpdatedAt: createdFeed.UpdatedAt,
-        Name: createdFeed.Name,
-        Url: createdFeed.Url,
-        UserID: createdFeed.UserID,
-    }
-
-    return writeJSON(res, http.StatusCreated, resBody)
+    return writeJSON(res, http.StatusCreated, createdFeed)
 }
 
 func(s *APIServer) HandleGetFeeds(res http.ResponseWriter, req *http.Request) error {
@@ -157,10 +118,28 @@ func (s *APIServer) middlewareAuth(handler authedHandler) http.HandlerFunc {
     }
 }
 
-func(s *APIServer) Readiness(res http.ResponseWriter, req *http.Request) error {
-    return writeJSON(res, http.StatusOK, map[string]string{"msg":"All good"})
+func (s *APIServer) handleUser(res http.ResponseWriter, req *http.Request) error {
+    if req.Method == "POST" {
+        return s.HandleCreateUser(res, req)
+    }
+
+    if req.Method == "GET" {
+        s.middlewareAuth(s.HandleGetUser).ServeHTTP(res, req)
+        return nil
+    }
+
+    return writeJSON(res, http.StatusBadRequest, map[string]string{"msg":req.Method + " is not allowed"})
 }
 
-func(s *APIServer) Err(res http.ResponseWriter, req *http.Request) error {
-    return InvalidJSON() 
+func (s *APIServer) handleFeed(res http.ResponseWriter, req *http.Request) error {
+    if req.Method == "GET" {
+        return s.HandleGetFeeds(res, req)
+    }
+
+    if req.Method == "POST" {
+        s.middlewareAuth(s.HandleCreateFeed).ServeHTTP(res, req)
+        return nil
+    }
+
+    return writeJSON(res, http.StatusBadRequest, map[string]string{"msg":req.Method + " is not allowed"})
 }
