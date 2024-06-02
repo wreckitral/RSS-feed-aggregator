@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"github.com/wreckitral/RSS-feed-aggregator/internal/auth"
-	"github.com/wreckitral/RSS-feed-aggregator/internal/database"
 )
 
 type APIServer struct {
@@ -57,19 +56,11 @@ func(s *APIServer) HandleCreateUser(res http.ResponseWriter, req *http.Request) 
     return writeJSON(res, http.StatusCreated, createdUser)
 }
 
-func(s *APIServer) HandleGetUser(res http.ResponseWriter, req *http.Request, user *database.User) error {
-    resBody := User{
-        ID: user.ID,
-        CreatedAt: user.CreatedAt,
-        UpdatedAt: user.UpdatedAt,
-        Name: user.Name,
-        APIKey: user.ApiKey,
-    }
-
-    return writeJSON(res, http.StatusOK, resBody)
+func(s *APIServer) HandleGetUser(res http.ResponseWriter, req *http.Request, user *User) error {
+    return writeJSON(res, http.StatusOK, user)
 }
 
-func(s *APIServer) HandleCreateFeed(res http.ResponseWriter, req *http.Request, user *database.User) error {
+func(s *APIServer) HandleCreateFeed(res http.ResponseWriter, req *http.Request, user *User) error {
     var reqBody CreateFeedRequest
 
     if err := json.NewDecoder(req.Body).Decode(&reqBody); err != nil {
@@ -93,6 +84,9 @@ func(s *APIServer) HandleGetFeeds(res http.ResponseWriter, req *http.Request) er
     feedsFromDb, err := s.Store.GetFeeds()
     if err != nil {
         return err
+    }
+    if len(feedsFromDb) == 0 {
+        return writeJSON(res, http.StatusNoContent, feedsFromDb)
     }
     
     return writeJSON(res, http.StatusOK, feedsFromDb)

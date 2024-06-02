@@ -12,7 +12,7 @@ import (
 
 type Storage interface {
     CreateUserToDb(*database.User)  (*User, error)
-    GetUserByAPIKey(apiKey string)  (*database.User, error)
+    GetUserByAPIKey(apiKey string)  (*User, error)
     CreateFeedToDb(*database.Feed)  (*Feed, error)
     GetFeeds()                      ([]*Feed, error)  
 }
@@ -59,18 +59,27 @@ func (s *PostgresStore) CreateUserToDb(user *database.User) (*User, error){
         CreatedAt: createdUser.CreatedAt,
         UpdatedAt: createdUser.UpdatedAt,
         Name: createdUser.Name,
+        APIKey: createdUser.ApiKey,
     }
 
     return userToAPI, nil
 }
 
-func (s *PostgresStore) GetUserByAPIKey(apiKey string) (*database.User, error) {
+func (s *PostgresStore) GetUserByAPIKey(apiKey string) (*User, error) {
     user, err := s.DB.GetUserByAPIKey(context.Background(), apiKey)
     if err != nil {
         return nil, err
     }
+
+    userToAPI := &User{
+        ID: user.ID,
+        CreatedAt: user.CreatedAt,
+        UpdatedAt: user.UpdatedAt,
+        Name: user.Name,
+        APIKey: user.ApiKey,
+    }
     
-    return &user, nil
+    return userToAPI, nil
 }
 
 

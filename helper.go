@@ -6,7 +6,6 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/wreckitral/RSS-feed-aggregator/internal/database"
 )
 
 type APIError struct {
@@ -59,4 +58,4 @@ func writeJSON(res http.ResponseWriter, status int, v any) error {
     return json.NewEncoder(res).Encode(v)
 }
 
-type authedHandler func(http.ResponseWriter, *http.Request, *database.User) error
+type authedHandler func(http.ResponseWriter, *http.Request, *User) error
