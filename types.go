@@ -35,8 +35,8 @@ type CreateFeedRequest struct {
 
 type FeedFollow struct {
     ID uuid.UUID `json:"id"`
-    UserID uuid.UUID `json:"userId"`
     FeedID uuid.UUID `json:"feedId"`
+    UserID uuid.UUID `json:"userId"`
     CreatedAt time.Time `json:"createdAt"`
     UpdatedAt time.Time `json:"updatedAt"`
 }
