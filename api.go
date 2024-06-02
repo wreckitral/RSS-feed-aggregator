@@ -25,6 +25,7 @@ func (s *APIServer) Run() error {
     router := http.NewServeMux()
 
     router.HandleFunc("/v1/users", MakeHandler(s.handleUser))
+    router.HandleFunc("/v1/feeds", MakeHandler(s.handleFeed))
     router.HandleFunc("/readiness", MakeHandler(s.Readiness))
     router.HandleFunc("/err", MakeHandler(s.Err))
     
@@ -38,10 +39,11 @@ func (s *APIServer) Run() error {
     return server.ListenAndServe()
 }
 
+
 func (s *APIServer) handleUser(res http.ResponseWriter, req *http.Request) error {
-	if req.Method == "POST" {
-		return s.HandleCreateUser(res, req)
-	}
+    if req.Method == "POST" {
+        return s.HandleCreateUser(res, req)
+    }
 
     if req.Method == "GET" {
         s.middlewareAuth(s.HandleGetUser).ServeHTTP(res, req)
@@ -50,6 +52,20 @@ func (s *APIServer) handleUser(res http.ResponseWriter, req *http.Request) error
 
     return writeJSON(res, http.StatusBadRequest, map[string]string{"msg":req.Method + " is not allowed"})
 }
+
+func (s *APIServer) handleFeed(res http.ResponseWriter, req *http.Request) error {
+    if req.Method == "POST" {
+        return s.HandleCreateUser(res, req)
+    }
+
+    if req.Method == "POST" {
+        s.middlewareAuth(s.HandleCreateFeed).ServeHTTP(res, req)
+        return nil
+    }
+
+    return writeJSON(res, http.StatusBadRequest, map[string]string{"msg":req.Method + " is not allowed"})
+}
+
 
 func(s *APIServer) HandleCreateUser(res http.ResponseWriter, req *http.Request) error {
     var reqBody CreateUserRequest
@@ -89,6 +105,39 @@ func(s *APIServer) HandleGetUser(res http.ResponseWriter, req *http.Request, use
     }
 
     return writeJSON(res, http.StatusOK, resBody)
+}
+
+func(s *APIServer) HandleCreateFeed(res http.ResponseWriter, req *http.Request, user *database.User) error {
+    var reqBody CreateFeedRequest
+
+    if err := json.NewDecoder(req.Body).Decode(&reqBody); err != nil {
+        return err
+    }
+
+    feed, err := NewFeed(reqBody.Name, reqBody.Url, user.ID)
+    if err != nil {
+        return err
+    }
+
+    createdFeed, err := s.Store.CreateFeedToDb(feed)
+    if err != nil {
+        return err
+    }
+
+    resBody := FeedResponse{
+        ID: createdFeed.ID, 
+        CreatedAt: createdFeed.CreatedAt,
+        UpdatedAt: createdFeed.UpdatedAt,
+        Name: createdFeed.Name,
+        Url: createdFeed.Url,
+        UserID: createdFeed.UserID,
+    }
+
+    return writeJSON(res, http.StatusCreated, resBody)
+}
+
+func(s *APIServer) HandleGetUser(res http.ResponseWriter, req *http.Request) error {
+     
 }
 
 func (s *APIServer) middlewareAuth(handler authedHandler) http.HandlerFunc {
