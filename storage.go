@@ -15,6 +15,7 @@ type Storage interface {
     GetUserByAPIKey(apiKey string)  (*User, error)
     CreateFeedToDb(*database.Feed)  (*Feed, error)
     GetFeeds()                      ([]*Feed, error)  
+    CreateFeedFollows(*database.FeedFollow) (*FeedFollow, error)
 }
 
 type PostgresStore struct {
@@ -131,4 +132,27 @@ func (s *PostgresStore) GetFeeds() ([]*Feed, error) {
     }
 
     return feeds, nil
+}
+
+func (s *PostgresStore) CreateFeedFollows(ff *database.FeedFollow) (*FeedFollow, error) {
+    feedToDb := database.CreateFeedFollowsParams{
+        ID: ff.ID,
+        CreatedAt: ff.CreatedAt,
+        UpdatedAt: ff.UpdatedAt,
+        UserID: ff.UserID,
+        FeedID: ff.FeedID,
+    }
+
+    feedToAPI, err := s.DB.CreateFeedFollows(context.Background(), feedToDb)
+    if err != nil {
+        return nil, err
+    }
+
+    return &FeedFollow{
+        ID: feedToAPI.ID,
+        CreatedAt: feedToAPI.CreatedAt,
+        UpdatedAt: feedToAPI.UpdatedAt,
+        UserID: feedToAPI.UserID,
+        FeedID: feedToAPI.FeedID,
+    }, nil
 }
