@@ -28,7 +28,7 @@ type FeedResponse struct {
     UserID uuid.UUID `json:"userId"`
 }
 
-type FeedRequest struct {
+type CreateFeedRequest struct {
     Name string `json:"name"`
     Url string `json:"url"`
 }
