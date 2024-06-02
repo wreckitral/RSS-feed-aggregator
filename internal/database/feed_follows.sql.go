@@ -60,11 +60,11 @@ func (q *Queries) DeleteFeedFollows(ctx context.Context, arg DeleteFeedFollowsPa
 }
 
 const getAllFeedFollows = `-- name: GetAllFeedFollows :many
-SELECT id, created_at, updated_at, user_id, feed_id FROM feed_follows
+SELECT id, created_at, updated_at, user_id, feed_id FROM feed_follows WHERE user_id = $1
 `
 
-func (q *Queries) GetAllFeedFollows(ctx context.Context) ([]FeedFollow, error) {
-	rows, err := q.db.QueryContext(ctx, getAllFeedFollows)
+func (q *Queries) GetAllFeedFollows(ctx context.Context, userID uuid.UUID) ([]FeedFollow, error) {
+	rows, err := q.db.QueryContext(ctx, getAllFeedFollows, userID)
 	if err != nil {
 		return nil, err
 	}
