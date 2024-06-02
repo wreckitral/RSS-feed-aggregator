@@ -33,6 +33,18 @@ type CreateFeedRequest struct {
     Url string `json:"url"`
 }
 
+type FeedFollow struct {
+    ID uuid.UUID `json:"id"`
+    CreatedAt time.Time `json:"createdAt"`
+    UpdatedAt time.Time `json:"updatedAt"`
+    UserID uuid.UUID `json:"userId"`
+    FeedID uuid.UUID `json:"feedId"`
+}
+
+type FeedFollowRequest struct {
+    FeedID uuid.UUID `json:"feedId"`
+}
+
 func NewUser(name string) (*database.User, error) {
     id := uuid.New()
     
@@ -55,4 +67,16 @@ func NewFeed(name, url string, userId uuid.UUID) (*database.Feed, error) {
         Url: url,
         UserID: userId,
     }, nil
+}
+
+func NewFeedFollow(userId, feedId uuid.UUID) (*database.FeedFollow) {
+    id := uuid.New()
+
+    return &database.FeedFollow{
+        ID: id,
+        CreatedAt: time.Now(),
+        UpdatedAt: time.Now(),
+        UserID: userId,
+        FeedID: feedId,
+    }
 }
