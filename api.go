@@ -80,7 +80,16 @@ func(s *APIServer) HandleCreateFeed(res http.ResponseWriter, req *http.Request, 
         return err
     }
 
-    return writeJSON(res, http.StatusCreated, createdFeed)
+    feedFollows := NewFeedFollow(createdFeed.UserID, createdFeed.ID)
+    createdFeedFollows, err := s.Store.CreateFeedFollows(feedFollows)
+    if err != nil {
+        return err
+    }
+
+    return writeJSON(res, http.StatusCreated, map[string]any{
+        "feed": createdFeed,
+        "feed_follow": createdFeedFollows,
+    })
 }
 
 func(s *APIServer) HandleGetFeeds(res http.ResponseWriter, req *http.Request) error {
