@@ -54,8 +54,8 @@ func (s *APIServer) handleUser(res http.ResponseWriter, req *http.Request) error
 }
 
 func (s *APIServer) handleFeed(res http.ResponseWriter, req *http.Request) error {
-    if req.Method == "POST" {
-        return s.HandleCreateUser(res, req)
+    if req.Method == "GET" {
+        return s.HandleGetFeeds(res, req)
     }
 
     if req.Method == "POST" {
@@ -124,7 +124,7 @@ func(s *APIServer) HandleCreateFeed(res http.ResponseWriter, req *http.Request, 
         return err
     }
 
-    resBody := FeedResponse{
+    resBody := Feed{
         ID: createdFeed.ID, 
         CreatedAt: createdFeed.CreatedAt,
         UpdatedAt: createdFeed.UpdatedAt,
@@ -136,8 +136,13 @@ func(s *APIServer) HandleCreateFeed(res http.ResponseWriter, req *http.Request, 
     return writeJSON(res, http.StatusCreated, resBody)
 }
 
-func(s *APIServer) HandleGetUser(res http.ResponseWriter, req *http.Request) error {
-     
+func(s *APIServer) HandleGetFeeds(res http.ResponseWriter, req *http.Request) error {
+    feedsFromDb, err := s.Store.GetFeeds()
+    if err != nil {
+        return err
+    }
+    
+    return writeJSON(res, http.StatusOK, feedsFromDb)
 }
 
 func (s *APIServer) middlewareAuth(handler authedHandler) http.HandlerFunc {
