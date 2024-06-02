@@ -89,7 +89,10 @@ func(s *APIServer) HandleGetFeeds(res http.ResponseWriter, req *http.Request) er
         return err
     }
     if len(feedsFromDb) == 0 {
-        return writeJSON(res, http.StatusNoContent, feedsFromDb)
+        return writeJSON(res, http.StatusNoContent, map[string]any{
+            "statusCode": http.StatusNoContent,
+            "msg": "no feeds yet",
+        })
     }
     
     return writeJSON(res, http.StatusOK, feedsFromDb)
@@ -110,6 +113,21 @@ func(s *APIServer) HandleCreateFeedFollows(res http.ResponseWriter, req *http.Re
     }
 
     return writeJSON(res, http.StatusCreated, feedFollow)
+}
+
+func(s *APIServer) HandleGetFeedFollows(res http.ResponseWriter, req *http.Request, user *User) error {
+    feeds, err := s.Store.GetFeedFollows(user.ID)
+    if err != nil {
+        return err
+    }
+    if len(feeds) == 0 {
+        return writeJSON(res, http.StatusNoContent, map[string]any{
+            "statusCode": http.StatusNoContent,
+            "msg": "no feed follows yet",
+        })
+    }
+
+    return writeJSON(res, http.StatusOK, feeds)
 }
 
 func(s *APIServer) HandleDeleteFeedFollows(res http.ResponseWriter, req *http.Request, user *User) error {
@@ -176,6 +194,11 @@ func (s *APIServer) handleFeed(res http.ResponseWriter, req *http.Request) error
 func (s *APIServer) handleFeedFollows(res http.ResponseWriter, req *http.Request) error {
     if req.Method == "POST" {
         s.middlewareAuth(s.HandleCreateFeedFollows).ServeHTTP(res, req)
+        return nil
+    }
+
+    if req.Method == "GET" {
+        s.middlewareAuth(s.HandleGetFeedFollows).ServeHTTP(res, req)
         return nil
     }
 
