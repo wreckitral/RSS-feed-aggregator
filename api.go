@@ -25,6 +25,7 @@ func (s *APIServer) Run() error {
 
     router.HandleFunc("/v1/users", MakeHandler(s.handleUser))
     router.HandleFunc("/v1/feeds", MakeHandler(s.handleFeed))
+    router.HandleFunc("/v1/feed_follows", MakeHandler(s.handleFeedFollows))
     
     server := http.Server{
         Addr: s.listenAddr,
@@ -92,6 +93,23 @@ func(s *APIServer) HandleGetFeeds(res http.ResponseWriter, req *http.Request) er
     return writeJSON(res, http.StatusOK, feedsFromDb)
 }
 
+func(s *APIServer) HandleCreateFeedFollows(res http.ResponseWriter, req *http.Request, user *User) error {
+    var reqBody FeedFollowRequest
+
+    if err := json.NewDecoder(req.Body).Decode(&reqBody); err != nil {
+        return InvalidJSON()
+    }
+    
+    feedFollowtoDb := NewFeedFollow(user.ID, reqBody.FeedID)
+
+    feedFollow, err := s.Store.CreateFeedFollows(feedFollowtoDb)
+    if err != nil {
+        return err
+    }
+
+    return writeJSON(res, http.StatusCreated, feedFollow)
+}
+
 func (s *APIServer) middlewareAuth(handler authedHandler) http.HandlerFunc {
     return func(res http.ResponseWriter, req *http.Request) {
         apiKey, err := auth.GetAPIKey(req.Header)
@@ -137,3 +155,15 @@ func (s *APIServer) handleFeed(res http.ResponseWriter, req *http.Request) error
 
     return writeJSON(res, http.StatusBadRequest, map[string]string{"msg":req.Method + " is not allowed"})
 }
+
+func (s *APIServer) handleFeedFollows(res http.ResponseWriter, req *http.Request) error {
+    if req.Method == "POST" {
+        s.middlewareAuth(s.HandleCreateFeedFollows).ServeHTTP(res, req)
+        return nil
+    }
+
+    return writeJSON(res, http.StatusBadRequest, map[string]string{"msg":req.Method + " is not allowed"})
+}
+
+
+
