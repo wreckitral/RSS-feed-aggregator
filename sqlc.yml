@@ -6,4 +6,4 @@ sql:
     gen:
       go:
         out: "internal/database"
-
+    strict_order_by: false
