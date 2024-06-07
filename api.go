@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -54,7 +55,7 @@ func(s *APIServer) HandleCreateUser(res http.ResponseWriter, req *http.Request) 
 
     createdUser, err := s.Store.CreateUserToDb(user)
     if err != nil {
-        return err
+        return NewAPIError(http.StatusBadRequest, err)
     }
 
     return writeJSON(res, http.StatusCreated, createdUser)
@@ -78,7 +79,7 @@ func(s *APIServer) HandleCreateFeed(res http.ResponseWriter, req *http.Request, 
 
     createdFeed, err := s.Store.CreateFeedToDb(feed)
     if err != nil {
-        return err
+        return NewAPIError(http.StatusBadRequest, err)
     }
 
     feedFollows := NewFeedFollow(createdFeed.UserID, createdFeed.ID)
@@ -99,8 +100,8 @@ func(s *APIServer) HandleGetFeeds(res http.ResponseWriter, req *http.Request) er
         return err
     }
     if len(feedsFromDb) == 0 {
-        return writeJSON(res, http.StatusNoContent, map[string]any{
-            "statusCode": http.StatusNoContent,
+        return writeJSON(res, http.StatusOK, map[string]any{
+            "statusCode": http.StatusOK,
             "msg": "no feeds yet",
         })
     }
@@ -119,7 +120,7 @@ func(s *APIServer) HandleCreateFeedFollows(res http.ResponseWriter, req *http.Re
 
     feedFollow, err := s.Store.CreateFeedFollows(feedFollowtoDb)
     if err != nil {
-        return err
+        return NewAPIError(http.StatusBadRequest, err)
     }
 
     return writeJSON(res, http.StatusCreated, feedFollow)
@@ -131,8 +132,8 @@ func(s *APIServer) HandleGetFeedFollows(res http.ResponseWriter, req *http.Reque
         return err
     }
     if len(feeds) == 0 {
-        return writeJSON(res, http.StatusNoContent, map[string]any{
-            "statusCode": http.StatusNoContent,
+        return writeJSON(res, http.StatusOK, map[string]any{
+            "statusCode": http.StatusOK,
             "msg": "no feed follows yet",
         })
     }
@@ -143,10 +144,13 @@ func(s *APIServer) HandleGetFeedFollows(res http.ResponseWriter, req *http.Reque
 func(s *APIServer) HandleDeleteFeedFollows(res http.ResponseWriter, req *http.Request, user *User) error {
     params := req.PathValue("feedFollowID") 
 
-    id := uuid.MustParse(params)
+    id, err := uuid.Parse(params)
+    if err != nil {
+        return NewAPIError(http.StatusBadRequest, fmt.Errorf("invalid params"))
+    }
 
     if err := s.Store.DeleteFeedFollows(id, user.ID); err != nil {
-        return err
+        return NewAPIError(http.StatusBadRequest, err)
     }
 
     return writeJSON(res, http.StatusOK, map[string]any{
