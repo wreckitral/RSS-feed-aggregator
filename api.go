@@ -28,6 +28,7 @@ func (s *APIServer) Run() error {
     router.HandleFunc("/v1/feeds", MakeHandler(s.handleFeed))
     router.HandleFunc("/v1/feed_follows", MakeHandler(s.handleFeedFollows))
     router.HandleFunc("/v1/feed_follows/{feedFollowID}", MakeHandler(s.handleFeedFollowsById))
+    router.HandleFunc("/v1/posts", MakeHandler(s.handlePosts))
     
     server := http.Server{
         Addr: s.listenAddr,
@@ -154,6 +155,22 @@ func(s *APIServer) HandleDeleteFeedFollows(res http.ResponseWriter, req *http.Re
     })
 }
 
+func (s *APIServer) HandleGetPostsForUsers(res http.ResponseWriter, req *http.Request, user *User) error {
+    posts, err := s.Store.GetPostForUsers(user.ID, 10)
+    if err != nil {
+        return NewAPIError(http.StatusBadRequest, err)
+    }
+    
+    if len(posts) == 0 {
+        return writeJSON(res, http.StatusOK, map[string]any{
+            "statusCode": http.StatusOK,
+            "msg": "no post yet",
+        })
+    }
+
+    return writeJSON(res, http.StatusOK, posts)
+}
+
 func (s *APIServer) middlewareAuth(handler authedHandler) http.HandlerFunc {
     return func(res http.ResponseWriter, req *http.Request) {
         apiKey, err := auth.GetAPIKey(req.Header)
@@ -217,6 +234,15 @@ func (s *APIServer) handleFeedFollows(res http.ResponseWriter, req *http.Request
 func (s *APIServer) handleFeedFollowsById(res http.ResponseWriter, req *http.Request) error {
     if req.Method == "DELETE" {
         s.middlewareAuth(s.HandleDeleteFeedFollows).ServeHTTP(res, req)
+        return nil
+    }
+
+    return writeJSON(res, http.StatusBadRequest, map[string]string{"msg":req.Method + " is not allowed"})
+}
+
+func (s *APIServer) handlePosts(res http.ResponseWriter, req *http.Request) error {
+    if req.Method == "GET" {
+        s.middlewareAuth(s.HandleGetPostsForUsers).ServeHTTP(res, req)
         return nil
     }
 
