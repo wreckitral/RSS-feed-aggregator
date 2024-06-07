@@ -7,6 +7,7 @@ package database
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -55,8 +56,21 @@ type DeleteFeedFollowsParams struct {
 }
 
 func (q *Queries) DeleteFeedFollows(ctx context.Context, arg DeleteFeedFollowsParams) error {
-	_, err := q.db.ExecContext(ctx, deleteFeedFollows, arg.ID, arg.UserID)
-	return err
+	result, err := q.db.ExecContext(ctx, deleteFeedFollows, arg.ID, arg.UserID)
+    if err != nil {
+	    return err
+    }
+
+    rowsAffected, err := result.RowsAffected()
+    if err != nil {
+        return err
+    }
+
+    if rowsAffected == 0 {
+        return fmt.Errorf("no rows deleted; ID does not exist")
+    }
+
+    return nil
 }
 
 const getAllFeedFollows = `-- name: GetAllFeedFollows :many
