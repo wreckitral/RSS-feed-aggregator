@@ -14,4 +14,7 @@ CREATE TABLE posts (
         ON DELETE CASCADE
 );
 
+-- +goose Down
+DROP TABLE posts;
+
 
