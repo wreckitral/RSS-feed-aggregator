@@ -99,12 +99,6 @@ func(s *APIServer) HandleGetFeeds(res http.ResponseWriter, req *http.Request) er
     if err != nil {
         return err
     }
-    if len(feedsFromDb) == 0 {
-        return writeJSON(res, http.StatusOK, map[string]any{
-            "statusCode": http.StatusOK,
-            "msg": "no feeds yet",
-        })
-    }
     
     return writeJSON(res, http.StatusOK, feedsFromDb)
 }
@@ -130,12 +124,6 @@ func(s *APIServer) HandleGetFeedFollows(res http.ResponseWriter, req *http.Reque
     feeds, err := s.Store.GetFeedFollows(user.ID)
     if err != nil {
         return err
-    }
-    if len(feeds) == 0 {
-        return writeJSON(res, http.StatusOK, map[string]any{
-            "statusCode": http.StatusOK,
-            "msg": "no feed follows yet",
-        })
     }
 
     return writeJSON(res, http.StatusOK, feeds)
@@ -163,13 +151,6 @@ func (s *APIServer) HandleGetPostsForUsers(res http.ResponseWriter, req *http.Re
     posts, err := s.Store.GetPostForUsers(user.ID, 10)
     if err != nil {
         return NewAPIError(http.StatusBadRequest, err)
-    }
-    
-    if len(posts) == 0 {
-        return writeJSON(res, http.StatusOK, map[string]any{
-            "statusCode": http.StatusOK,
-            "msg": "no post yet",
-        })
     }
 
     return writeJSON(res, http.StatusOK, posts)
