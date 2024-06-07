@@ -50,6 +50,14 @@ func NewPostgresStore() (*PostgresStore, error) {
 }
 
 func (s *PostgresStore) CreateUserToDb(user *database.User) (*User, error){
+    if user.Name == "" {
+        return nil, fmt.Errorf("name cannot be empty string")
+    }
+
+    if len(user.Name) <= 3{
+        return nil, fmt.Errorf("name is too short")
+    }
+    
     userToDb := database.CreateUserParams{
         ID: user.ID,
         CreatedAt: user.CreatedAt,
@@ -92,6 +100,10 @@ func (s *PostgresStore) GetUserByAPIKey(apiKey string) (*User, error) {
 
 
 func (s *PostgresStore) CreateFeedToDb(feed *database.Feed) (*Feed, error) {
+    if feed.Name == "" || feed.Url == "" {
+        return nil, fmt.Errorf("request data cannot be empty")
+    }
+
     feedToDb := database.CreateFeedParams{
         ID: feed.ID,
         CreatedAt: feed.CreatedAt,
