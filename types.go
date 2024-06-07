@@ -45,6 +45,17 @@ type FeedFollowRequest struct {
     FeedID uuid.UUID `json:"feedId"`
 }
 
+type Post struct {
+    ID          uuid.UUID `json:"id"`
+    CreatedAt   time.Time `json:"createdAt"`
+    UpdatedAt   time.Time `json:"updatedAt"`
+    Title       string `json:"title"`
+    Url         string `json:"url"`
+    Description *string `json:"description"`
+    PublishedAt time.Time `json:"publishedAt"`
+    FeedID      uuid.UUID `json:"feedId"`
+}
+
 func NewUser(name string) (*database.User, error) {
     id := uuid.New()
     
