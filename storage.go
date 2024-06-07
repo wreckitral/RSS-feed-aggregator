@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/google/uuid"
 	_ "github.com/lib/pq"
@@ -39,6 +40,8 @@ func NewPostgresStore() (*PostgresStore, error) {
     }
 
     dbQueries := database.New(db)
+    
+    go startScrapping(dbQueries, 10, time.Minute)
     
     return &PostgresStore{
         DB: dbQueries,
