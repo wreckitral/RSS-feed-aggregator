@@ -20,6 +20,7 @@ type Storage interface {
     CreateFeedFollows(*database.FeedFollow) (*FeedFollow, error)
     GetFeedFollows(uuid.UUID) ([]*FeedFollow, error)
     DeleteFeedFollows(id, user_id uuid.UUID) error
+    GetPostForUsers(userId uuid.UUID, limit int32) ([]*Post, error)
 }
 
 type PostgresStore struct {
@@ -196,4 +197,39 @@ func (s *PostgresStore) GetFeedFollows(userId uuid.UUID) ([]*FeedFollow, error) 
     }
 
     return feedFollows, nil
+}
+
+
+func (s *PostgresStore) GetPostForUsers(userId uuid.UUID, limit int32) ([]*Post, error) {
+    params := database.GetPostsForUserParams{
+        UserID: userId,        
+        Limit: limit,
+    }
+
+    getPosts, err := s.DB.GetPostsForUser(context.Background(), params)
+    if err != nil {
+        return nil, err
+    }
+
+    posts := []*Post{}
+
+    for _, post := range getPosts {
+        var description *string
+        if post.Description.Valid {
+            description = &post.Description.String
+        }
+        p := &Post{
+            ID: post.ID,
+            CreatedAt: post.CreatedAt,
+            UpdatedAt: post.UpdatedAt,
+            Title: post.Title,
+            Url: post.Url,
+            Description: description,
+            PublishedAt: post.PublishedAt,
+            FeedID: post.FeedID,
+        }
+        posts = append(posts, p)
+    }
+
+    return posts, nil
 }
