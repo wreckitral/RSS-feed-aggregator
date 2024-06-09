@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"log"
 	"os"
 	"time"
 
@@ -29,7 +30,10 @@ type PostgresStore struct {
 
 func NewPostgresStore() (*PostgresStore, error) {
     dbConn := os.Getenv("DBCONN")
-    fmt.Println(dbConn)
+    if dbConn == "" {
+        log.Fatal("db env is missing")
+    }
+    fmt.Println(dbConn) 
 
     db, err := sql.Open("postgres", dbConn)
     if err != nil {

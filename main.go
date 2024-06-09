@@ -3,15 +3,9 @@ package main
 import (
 	"log"
 	"os"
-
-	"github.com/joho/godotenv"
 )
 
 func main() {
-    if err := godotenv.Load(".env"); err != nil {
-        log.Fatal(err)
-    }
-
     port := os.Getenv("PORT")
 
     store, err := NewPostgresStore()
