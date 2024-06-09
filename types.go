@@ -8,11 +8,11 @@ import (
 )
 
 type User struct {
-    ID uuid.UUID `json:"id"`
-    CreatedAt time.Time `json:"createdAt"`
-    UpdatedAt time.Time `json:"updatedAt"`
-    Name string `json:"name"`
-    APIKey string `json:"apiKey"`
+    ID          uuid.UUID   `json:"id"`
+    CreatedAt   time.Time   `json:"createdAt"`
+    UpdatedAt   time.Time   `json:"updatedAt"`
+    Name        string      `json:"name"`
+    APIKey      string      `json:"apiKey"`
 }
 
 type CreateUserRequest struct {
@@ -20,25 +20,25 @@ type CreateUserRequest struct {
 }
 
 type Feed struct {
-    ID uuid.UUID `json:"id"`
-    CreatedAt time.Time `json:"createdAt"`
-    UpdatedAt time.Time `json:"updatedAt"`
-    Name string `json:"name"`
-    Url string `json:"url"`
-    UserID uuid.UUID `json:"userId"`
+    ID          uuid.UUID   `json:"id"`
+    CreatedAt   time.Time   `json:"createdAt"`
+    UpdatedAt   time.Time   `json:"updatedAt"`
+    Name        string      `json:"name"`
+    Url         string      `json:"url"`
+    UserID      uuid.UUID   `json:"userId"`
 }
 
 type CreateFeedRequest struct {
-    Name string `json:"name"`
-    Url string `json:"url"`
+    Name    string  `json:"name"`
+    Url     string  `json:"url"`
 }
 
 type FeedFollow struct {
-    ID uuid.UUID `json:"id"`
-    FeedID uuid.UUID `json:"feedId"`
-    UserID uuid.UUID `json:"userId"`
-    CreatedAt time.Time `json:"createdAt"`
-    UpdatedAt time.Time `json:"updatedAt"`
+    ID          uuid.UUID `json:"id"`
+    FeedID      uuid.UUID `json:"feedId"`
+    UserID      uuid.UUID `json:"userId"`
+    CreatedAt   time.Time `json:"createdAt"`
+    UpdatedAt   time.Time `json:"updatedAt"`
 }
 
 type FeedFollowRequest struct {
@@ -46,14 +46,14 @@ type FeedFollowRequest struct {
 }
 
 type Post struct {
-    ID          uuid.UUID `json:"id"`
-    CreatedAt   time.Time `json:"createdAt"`
-    UpdatedAt   time.Time `json:"updatedAt"`
-    Title       string `json:"title"`
-    Url         string `json:"url"`
-    Description *string `json:"description"`
-    PublishedAt time.Time `json:"publishedAt"`
-    FeedID      uuid.UUID `json:"feedId"`
+    ID          uuid.UUID   `json:"id"`
+    CreatedAt   time.Time   `json:"createdAt"`
+    UpdatedAt   time.Time   `json:"updatedAt"`
+    Title       string      `json:"title"`
+    Url         string      `json:"url"`
+    Description *string     `json:"description"`
+    PublishedAt time.Time   `json:"publishedAt"`
+    FeedID      uuid.UUID   `json:"feedId"`
 }
 
 func NewUser(name string) (*database.User, error) {
