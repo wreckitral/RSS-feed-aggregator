@@ -7,6 +7,9 @@ import (
 
 func main() {
     port := os.Getenv("PORT")
+    if port == "" {
+        log.Fatal("port env is missing")
+    }
 
     store, err := NewPostgresStore()
     if err != nil {
