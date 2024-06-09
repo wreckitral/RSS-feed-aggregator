@@ -13,15 +13,17 @@ import (
 	"github.com/wreckitral/RSS-feed-aggregator/internal/database"
 )
 
+// Storage is the interface that stores logic for interacting with database
+// and marshalling data from database to json for API response
 type Storage interface {
-    CreateUserToDb(*database.User)  (*User, error)
-    GetUserByAPIKey(apiKey string)  (*User, error)
-    CreateFeedToDb(*database.Feed)  (*Feed, error)
-    GetFeeds()                      ([]*Feed, error)  
-    CreateFeedFollows(*database.FeedFollow) (*FeedFollow, error)
-    GetFeedFollows(uuid.UUID) ([]*FeedFollow, error)
-    DeleteFeedFollows(id, user_id uuid.UUID) error
-    GetPostForUsers(userId uuid.UUID, limit int32) ([]*Post, error)
+    CreateUserToDb(*database.User)                  (*User, error)
+    GetUserByAPIKey(apiKey string)                  (*User, error)
+    CreateFeedToDb(*database.Feed)                  (*Feed, error)
+    GetFeeds()                                      ([]*Feed, error)  
+    CreateFeedFollows(*database.FeedFollow)         (*FeedFollow, error)
+    GetFeedFollows(uuid.UUID)                       ([]*FeedFollow, error)
+    DeleteFeedFollows(id, user_id uuid.UUID)        error
+    GetPostForUsers(userId uuid.UUID, limit int32)  ([]*Post, error)
 }
 
 type PostgresStore struct {
