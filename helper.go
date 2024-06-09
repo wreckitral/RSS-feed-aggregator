@@ -6,6 +6,7 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/wreckitral/RSS-feed-aggregator/internal/auth"
 )
 
 type APIError struct {
@@ -59,3 +60,24 @@ func writeJSON(res http.ResponseWriter, status int, v any) error {
 }
 
 type authedHandler func(http.ResponseWriter, *http.Request, *User) error
+
+func (s *APIServer) middlewareAuth(handler authedHandler) http.HandlerFunc {
+    return func(res http.ResponseWriter, req *http.Request) {
+        apiKey, err := auth.GetAPIKey(req.Header)
+        if err != nil {
+            writeJSON(res, http.StatusForbidden, UnauthorizedError(err.Error()))
+            return
+        }
+
+        user, err := s.Store.GetUserByAPIKey(apiKey)
+        if err != nil {
+            writeJSON(res, http.StatusForbidden, UnauthorizedError("api key is not recognized"))
+            return
+        }
+
+        if err := handler(res, req, user); err != nil {
+            writeJSON(res, http.StatusInternalServerError, err)
+        }
+    }
+}
+
