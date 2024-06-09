@@ -12,7 +12,7 @@ func main() {
         log.Fatal(err)
     }
 
-    port := ":" + os.Getenv("PORT")
+    port := os.Getenv("PORT")
 
     store, err := NewPostgresStore()
     if err != nil {

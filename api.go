@@ -32,7 +32,7 @@ func (s *APIServer) Run() error {
     router.HandleFunc("/v1/posts", MakeHandler(s.handlePosts))
     
     server := http.Server{
-        Addr: s.listenAddr,
+        Addr: "0.0.0.0:" + s.listenAddr,
         Handler: router,
     }
 
