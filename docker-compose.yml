@@ -12,6 +12,18 @@ services:
     volumes: 
       - db_data:/var/lib/postgresql/data
 
+  go-app:
+    build: .
+    container_name: go-rss-feed
+    restart: always
+    depends_on:
+      - db
+    environment:
+      - PORT=7777
+      - DBCONN=postgres://postgres:rss-feed@db:5432/blogator?sslmode=disable
+    ports:
+      - '7777:7777'
+
 volumes:
   db_data:
     driver: local
