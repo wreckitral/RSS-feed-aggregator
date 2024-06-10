@@ -35,7 +35,6 @@ func NewPostgresStore() (*PostgresStore, error) {
     if dbConn == "" {
         log.Fatal("db env is missing")
     }
-    fmt.Println(dbConn) 
 
     db, err := sql.Open("postgres", dbConn)
     if err != nil {
