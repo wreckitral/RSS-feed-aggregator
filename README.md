@@ -12,6 +12,17 @@ if you have golang and postgresql installed
 ```
 PORT=<port>
 DBCONN=postgres://<username>:<password>@<hostname>:5432/<dbname>?sslmode=disable
-
 ```
+- install [goose](https://github.com/pressly/goose)
+- `cd sql/schema`
+- `goose postgres "postgres://<username>:<password>@<hostname>:5432/<dbname>?sslmode=disable" up`
 - `make run`
+
+### Using Docker
+to run the project,
+- `docker-compose up -d`
+to turn down the project
+- `docker-compose down`
+
+## Endpoints 
+
