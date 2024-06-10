@@ -25,4 +25,22 @@ to turn down the project
 - `docker-compose down`
 
 ## Endpoints 
+<table>
+  <tr>
+    <td>Endpoint</td><td>Method</td><td>Status</td><td>Request</td><td>Response</td>
+  </tr>
+  <td>
+    `/users`
+  </td>
+  <td>
+    POST
+  </td>
+  <td>
+    200
+  </td>
+  <td>
+    
+  </td>
+  
+</table>
 
