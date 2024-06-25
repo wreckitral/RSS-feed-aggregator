@@ -21,8 +21,8 @@ DBCONN=postgres://<username>:<password>@<hostname>:5432/<dbname>?sslmode=disable
 ### Using Docker
 to run the project,
 - `docker-compose up -d`
-to turn down the project
 - `docker-compose down`
+to turn down the project
 
 ## Endpoints 
 <table>
