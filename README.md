@@ -64,7 +64,6 @@ to turn down the project
   <td>
 
   ```
-  Request Header,
   'Authorization': ApiKey <API KEY>
   ```
 
@@ -90,7 +89,6 @@ to turn down the project
   <td>
 
   ```
-  Request Header,
   'Authorization': ApiKey <API KEY>
   ```
 
@@ -134,7 +132,6 @@ to turn down the project
   <td>
 
   ```
-  Request Header,
   'Authorization': ApiKey <API KEY>
   ```
 
