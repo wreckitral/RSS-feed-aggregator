@@ -1,6 +1,6 @@
 # RSS Feed Aggregator
-The RSS Feed Aggregator API is a high-performance service built using Go, 
-using sqlc for type-safe SQL queries and goose for database migrations. 
+The RSS Feed Aggregator API is a high-performance service built using Go,
+using sqlc for type-safe SQL queries and goose for database migrations.
 This API allows you to manage RSS feeds and articles.
 
 ## How to Run
@@ -8,7 +8,7 @@ This API can be run on your local development system using two methods.
 
 ### Directly
 if you have golang and postgresql installed
-- set your env 
+- set your env
 ```
 PORT=<port>
 DBCONN=postgres://<username>:<password>@<hostname>:5432/<dbname>?sslmode=disable
@@ -24,7 +24,7 @@ to run the project,
 - `docker-compose down`
 to turn down the project
 
-## Endpoints 
+## Endpoints
 <table>
   <tr>
     <td>Endpoint</td><td>Method</td><td>Status</td><td>Request</td><td>Response</td>
@@ -43,7 +43,7 @@ to turn down the project
 
   </td>
   <td>
-    
+
   ```json
   {
     "id": "b8239f5e-0227-43d8-b60c-5a184ea80e95",
@@ -55,14 +55,14 @@ to turn down the project
   ```
 
   </td>
-  
+
   </tr>
   <tr>
   <td> `/users` </td>
   <td> GET </td>
   <td> 200 </td>
   <td>
-    
+
   ```
   Request Header,
   'Authorization': ApiKey <API KEY>
@@ -70,7 +70,7 @@ to turn down the project
 
   </td>
   <td>
-    
+
   ```json
   {
     "id": "b8239f5e-0227-43d8-b60c-5a184ea80e95",
@@ -88,12 +88,12 @@ to turn down the project
   <td> POST </td>
   <td> 201 </td>
   <td>
-    
+
   ```
   Request Header,
   'Authorization': ApiKey <API KEY>
   ```
-    
+
   ```json
   {
     "name": "The Verge Tech",
@@ -103,7 +103,7 @@ to turn down the project
 
   </td>
   <td>
-    
+
   ```json
   {
     "feed": {
@@ -132,7 +132,7 @@ to turn down the project
   <td> GET </td>
   <td> 200 </td>
   <td>
-    
+
   ```
   Request Header,
   'Authorization': ApiKey <API KEY>
@@ -140,7 +140,7 @@ to turn down the project
 
   </td>
   <td>
-    
+
   ```json
   [
     {
@@ -165,7 +165,7 @@ to turn down the project
 
   </td>
   </tr>
-  
-  
+
+
 </table>
 
