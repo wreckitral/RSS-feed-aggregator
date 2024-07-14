@@ -175,7 +175,7 @@ to turn down the project
 
   ```json
   {
-    "feedId": "",
+    "feedId": "ad1416d3-89ec-48c9-b0eb-5621f8d4ba5c",
   }
   ```
 
@@ -184,21 +184,11 @@ to turn down the project
 
   ```json
   {
-    "feed": {
-        "id": "b87fc085-431a-4606-92f6-bd12f8fd741c",
-        "createdAt": "2024-06-14T08:04:42.546561Z",
-        "updatedAt": "2024-06-14T08:04:42.546561Z",
-        "name": "The Verge Tech",
-        "url": "http://www.theverge.com/tech/rss/index.xml",
-        "userId": "082536ec-3598-4f6d-93d4-0fe23cfc623d"
-    },
-    "feed_follow": {
-        "id": "5d146edf-7715-42f5-a324-94b2771e3e2a",
-        "feedId": "b87fc085-431a-4606-92f6-bd12f8fd741c",
-        "userId": "082536ec-3598-4f6d-93d4-0fe23cfc623d",
-        "createdAt": "2024-06-14T08:04:42.547676Z",
-        "updatedAt": "2024-06-14T08:04:42.547676Z"
-    }
+    "id": "e4dc4679-b99f-4273-8055-d8db4ed6b7d3",
+    "feedId": "ad1416d3-89ec-48c9-b0eb-5621f8d4ba5c",
+    "userId": "b8239f5e-0227-43d8-b60c-5a184ea80e95",
+    "createdAt": "2024-07-14T23:47:21.23965Z",
+    "updatedAt": "2024-07-14T23:47:21.23965Z"
   }
   ```
 
@@ -221,22 +211,19 @@ to turn down the project
   ```json
   [
     {
-        "id": "ad1416d3-89ec-48c9-b0eb-5621f8d4ba5c",
-        "createdAt": "2024-06-14T07:49:22.232084Z",
-        "updatedAt": "2024-06-14T07:53:05.541544Z",
-        "name": "CNN Tech",
-        "url": "http://www.buzzfeed.com/tvandmovies.xml",
-        "userId": "082536ec-3598-4f6d-93d4-0fe23cfc623d"
+        "id": "a700f056-9833-4171-9463-1acdc9e57cc2",
+        "feedId": "91b64c0a-b549-49a0-8c10-149db699289a",
+        "userId": "b8239f5e-0227-43d8-b60c-5a184ea80e95",
+        "createdAt": "2024-06-09T11:35:55.716246Z",
+        "updatedAt": "2024-06-09T11:35:55.716246Z"
     },
     {
-        "id": "e0a2b609-ab42-460b-8f08-4fb44887790c",
-        "createdAt": "2024-06-10T06:57:58.735041Z",
-        "updatedAt": "2024-06-14T07:53:05.545006Z",
-        "name": "CNN Tech",
-        "url": "http://rss.cnn.com/rss/cnn_tech.rss",
-        "userId": "082536ec-3598-4f6d-93d4-0fe23cfc623d"
-    },
-    ...
+        "id": "e4dc4679-b99f-4273-8055-d8db4ed6b7d3",
+        "feedId": "ad1416d3-89ec-48c9-b0eb-5621f8d4ba5c",
+        "userId": "b8239f5e-0227-43d8-b60c-5a184ea80e95",
+        "createdAt": "2024-07-14T23:47:21.23965Z",
+        "updatedAt": "2024-07-14T23:47:21.23965Z"
+    }
   ]
   ```
 
