@@ -42,7 +42,7 @@ func(s *APIServer) HandleGetFeeds(res http.ResponseWriter, req *http.Request) er
     if err != nil {
         return err
     }
-    
+
     return writeJSON(res, http.StatusOK, feedsFromDb)
 }
 
@@ -52,7 +52,7 @@ func(s *APIServer) HandleCreateFeedFollows(res http.ResponseWriter, req *http.Re
     if err := json.NewDecoder(req.Body).Decode(&reqBody); err != nil {
         return InvalidJSON()
     }
-    
+
     feedFollowtoDb := NewFeedFollow(user.ID, reqBody.FeedID)
 
     feedFollow, err := s.Store.CreateFeedFollows(feedFollowtoDb)
@@ -73,7 +73,7 @@ func(s *APIServer) HandleGetFeedFollows(res http.ResponseWriter, req *http.Reque
 }
 
 func(s *APIServer) HandleDeleteFeedFollows(res http.ResponseWriter, req *http.Request, user *User) error {
-    params := req.PathValue("feedFollowID") 
+    params := req.PathValue("feedFollowID")
 
     id, err := uuid.Parse(params)
     if err != nil {
@@ -86,6 +86,6 @@ func(s *APIServer) HandleDeleteFeedFollows(res http.ResponseWriter, req *http.Re
 
     return writeJSON(res, http.StatusOK, map[string]any{
         "statusCode": http.StatusOK,
-        "msg": "feed with id: " + params + " successfully unfollowed",
+        "msg": "feed with feed follows id: " + params + " successfully unfollowed",
     })
 }

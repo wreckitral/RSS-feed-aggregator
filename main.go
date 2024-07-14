@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-    port := os.Getenv("PORT")
+    port := os.Getenv(":7777")
     if port == "" {
         log.Fatal("port env is missing")
     }
