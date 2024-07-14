@@ -22,7 +22,7 @@ DBCONN=postgres://<username>:<password>@<hostname>:5432/<dbname>?sslmode=disable
 to run the project,
 - `docker-compose up -d`
 - `docker-compose down`
-to turn down the project
+to turn down the container
 
 ## Endpoints
 <table>
@@ -229,9 +229,6 @@ to turn down the project
 
   </td>
   </tr>
-
-  
-
 
 </table>
 
