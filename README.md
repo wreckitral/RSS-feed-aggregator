@@ -30,7 +30,7 @@ to turn down the project
     <td>Endpoint</td><td>Method</td><td>Status</td><td>Request</td><td>Response</td>
   </tr>
   <tr>
-  <td> `/users` </td>
+  <td> /users </td>
   <td> POST </td>
   <td> 201 </td>
   <td>
@@ -58,7 +58,7 @@ to turn down the project
 
   </tr>
   <tr>
-  <td> `/users` </td>
+  <td>  /users </td>
   <td> GET </td>
   <td> 200 </td>
   <td>
@@ -83,7 +83,7 @@ to turn down the project
   </td>
   </tr>
   <tr>
-  <td> `/feeds` </td>
+  <td> /feeds </td>
   <td> POST </td>
   <td> 201 </td>
   <td>
@@ -126,7 +126,7 @@ to turn down the project
   </tr>
     </tr>
   <tr>
-  <td> `/feeds` </td>
+  <td> /feeds </td>
   <td> GET </td>
   <td> 200 </td>
   <td>
@@ -164,7 +164,7 @@ to turn down the project
   </tr>
 
   <tr>
-  <td> `/feed_follows` </td>
+  <td> /feed_follows </td>
   <td> POST </td>
   <td> 201 </td>
   <td>
@@ -175,8 +175,7 @@ to turn down the project
 
   ```json
   {
-    "name": "The Verge Tech",
-    "url": "http://www.theverge.com/tech/rss/index.xml"
+    "feedId": "",
   }
   ```
 
@@ -207,7 +206,7 @@ to turn down the project
   </tr>
     </tr>
   <tr>
-  <td> `/feed_follows` </td>
+  <td>  /feed_follows </td>
   <td> GET </td>
   <td> 200 </td>
   <td>
