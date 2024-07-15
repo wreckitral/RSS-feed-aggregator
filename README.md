@@ -175,7 +175,7 @@ to turn down the container
 
   ```json
   {
-    "feedId": "ad1416d3-89ec-48c9-b0eb-5621f8d4ba5c",
+    "feedId": "ad1416d3-89ec-48c9-b0eb-5621f8d4ba5c"
   }
   ```
 
@@ -194,7 +194,7 @@ to turn down the container
 
   </td>
   </tr>
-    </tr>
+  
   <tr>
   <td>  /feed_follows </td>
   <td> GET </td>
@@ -227,6 +227,71 @@ to turn down the container
   ]
   ```
 
+  </td>
+  </tr>
+
+  <tr>
+  <td>  /feed_follows/{feedFollowId} </td>
+  <td> DELETE </td>
+  <td> 200 </td>
+  <td>
+
+  ```
+  'Authorization': ApiKey <API KEY>
+  ```
+
+  </td>
+  <td>
+
+  ```json
+  {
+    "statusCode": 200,
+    "msg": "feed with feed follow id: 5d146edf-7715-42f5-a324-94b2771e3e2a successfully unfollowed"
+  }
+  ```
+ 
+  </td>
+  </tr>
+
+  <tr>
+  <td>  /posts </td>
+  <td> GET </td>
+  <td> 200 </td>
+  <td>
+
+  ```
+  'Authorization': ApiKey <API KEY>
+  ```
+
+  </td>
+  <td>
+
+  ```json
+  [
+    {
+        "id": "59364a5d-7a32-48a0-bc5d-eedae4559576",
+        "createdAt": "2024-06-10T06:58:02.636745Z",
+        "updatedAt": "2024-06-10T06:58:02.636745Z",
+        "title": "",
+        "url": "https://www.cnn.com/videos/tech/2024/04/05/ne-yo-ai-impact-music-contd-lcl-vpx.cnn",
+        "description": "Grammy award-winning artist Ne-Yo joins CNN's Laura Coates to discuss the impact of artificial intelligence on the music industry.",
+        "publishedAt": "0001-01-01T00:00:00Z",
+        "feedId": "e0a2b609-ab42-460b-8f08-4fb44887790c"
+    },
+    {
+        "id": "19175151-2db2-4ce7-b965-8a2be24b7c52",
+        "createdAt": "2024-06-10T06:58:02.638624Z",
+        "updatedAt": "2024-06-10T06:58:02.638624Z",
+        "title": "",
+        "url": "https://www.cnn.com/videos/tech/2024/03/17/gps-0317-tiktok-ban-in-the-us.cnn",
+        "description": "Fareed hosts a spirited debate on the House bill that could lead to a US ban on TikTok, with the American Enterprise Institute's Kori Schake and Glen Gerstell, former general counsel for the National Security Agency. They             discuss national-security risks the Chinese-owned app might pose given its many American users.",
+        "publishedAt": "0001-01-01T00:00:00Z",
+        "feedId": "e0a2b609-ab42-460b-8f08-4fb44887790c"
+    },
+    ...
+  ]
+  ```
+ 
   </td>
   </tr>
 
