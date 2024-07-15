@@ -284,7 +284,7 @@ to turn down the container
         "updatedAt": "2024-06-10T06:58:02.638624Z",
         "title": "",
         "url": "https://www.cnn.com/videos/tech/2024/03/17/gps-0317-tiktok-ban-in-the-us.cnn",
-        "description": "Fareed hosts a spirited debate on the House bill that could lead to a US ban on TikTok, with the American Enterprise Institute's Kori Schake and Glen Gerstell, former general counsel for the National Security Agency. They             discuss national-security risks the Chinese-owned app might pose given its many American users.",
+        "description": "Fareed hosts a spirited debate on the House bill that could lead to a US ban on TikTok.",
         "publishedAt": "0001-01-01T00:00:00Z",
         "feedId": "e0a2b609-ab42-460b-8f08-4fb44887790c"
     },
