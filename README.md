@@ -194,7 +194,7 @@ to turn down the container
 
   </td>
   </tr>
-  
+
   <tr>
   <td>  /feed_follows </td>
   <td> GET </td>
@@ -224,6 +224,7 @@ to turn down the container
         "createdAt": "2024-07-14T23:47:21.23965Z",
         "updatedAt": "2024-07-14T23:47:21.23965Z"
     }
+    ...
   ]
   ```
 
@@ -249,7 +250,7 @@ to turn down the container
     "msg": "feed with feed follow id: 5d146edf-7715-42f5-a324-94b2771e3e2a successfully unfollowed"
   }
   ```
- 
+
   </td>
   </tr>
 
@@ -291,7 +292,7 @@ to turn down the container
     ...
   ]
   ```
- 
+
   </td>
   </tr>
 
